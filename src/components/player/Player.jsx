@@ -20,21 +20,7 @@ export default function Player() {
             console.log("jvawdjh")
         })
     }, [])
-    const setScreenOrientation = () => {
-        if (window.matchMedia("(orientation: portrait)").matches) {
-            console.log('orientation: portrait');
-            this.setState({
-                screenOrientation: 'portrait'
-            });
-        }
 
-        if (window.matchMedia("(orientation: landscape)").matches) {
-            console.log('orientation: landscape');
-            this.setState({
-                screenOrientation: 'landscape'
-            });
-        }
-    }
     function getDuration(duration) {
         duration = Math.floor(duration - 0);
         let sec = Math.floor(duration % 60);
@@ -78,18 +64,21 @@ export default function Player() {
                 } else if (playerRef.current.msRequestFullscreen) { /* IE11 */
                     playerRef.current.msRequestFullscreen();
                 }
-                if (window.screen.orientation) {
-                    window.screen.orientation.lock('landscape').then(()=>console.log("")).catch((err)=>console.log(err));
+                if (window.screen.orientation.lock) {
+                    window.screen.orientation.lock('landscape').then(() => console.log("")).catch((err) => console.log(err));
                 }
             }
             else {
-                // playerRef.current.exitFullscreen()
-                document.exitFullscreen();
-                // document.webkitExitFullscreen();
-                // document.msExitFullscreen();
-                // if (window.screen.orientation) {
-                    // window.screen.orientation.unlock().then(()=>{}).catch((err)=>console.log(err));
-                // }
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                if (window.screen.orientation.lock) {
+                    window.screen.orientation.unlock().then().catch((err) => console.log(err));
+                }
             }
             setisfullScreen(!isfullScreen)
         }
