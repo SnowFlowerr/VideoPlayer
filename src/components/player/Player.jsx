@@ -90,9 +90,9 @@ export default function Player() {
                 } else if (playerRef.current.msExitFullscreen) { /* IE11 */
                     playerRef.current.msExitFullscreen();
                 }
-                if (window.screen.orientation) {
-                    await window.screen.orientation.unlock();
-                }
+                // if (window.screen.orientation) {
+                //     await window.screen.orientation.unlock();
+                // }
             }
             setisfullScreen(!isfullScreen)
         }
