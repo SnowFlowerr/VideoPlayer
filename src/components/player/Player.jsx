@@ -77,9 +77,9 @@ export default function Player() {
                 } else if (playerRef.current.msRequestFullscreen) { /* IE11 */
                     playerRef.current.msRequestFullscreen();
                 }
-                // if (screen.orientation) {
+                if (window.screen.orientation) {
                     await window.screen.orientation.lock('landscape');
-                // }
+                }
             }
             else {
                 // playerRef.current.exitFullscreen()
@@ -89,6 +89,9 @@ export default function Player() {
                     playerRef.current.webkitExitFullscreen();
                 } else if (playerRef.current.msExitFullscreen) { /* IE11 */
                     playerRef.current.msExitFullscreen();
+                }
+                if (window.screen.orientation) {
+                    await window.screen.orientation.unlock();
                 }
             }
             setisfullScreen(!isfullScreen)
