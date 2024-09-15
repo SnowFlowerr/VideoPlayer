@@ -1,0 +1,19 @@
+.BigBox{
+    background-color: bisque;
+    height: 100dvh;
+    perspective: 200px;
+}
+.box{
+    /* cursor: none; */
+    position: absolute;
+    background-color: red;
+    width:200px;
+    height: 200px;
+    border-radius: 100%;
+    text-align: center;
+    align-content: center;
+    font-size: 15px;
+    /* user-select: none; */
+    filter: blur(5px);
+    transform: rotateX(30deg);
+}
