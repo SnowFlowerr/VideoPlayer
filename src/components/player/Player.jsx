@@ -67,10 +67,34 @@ export default function Player() {
     }
 
     async function handleFullScreen() {
-        setisfullScreen(!isfullScreen)
-        if (window.screen.orientation) {
-            playerRef.current.requestFullscreen()
-            // await window.screen.orientation.lock('landscape-primary')
+        try {
+            if (!isfullScreen) {
+                // playerRef.current.requestFullscreen()
+                if (playerRef.current.requestFullscreen) {
+                    playerRef.current.requestFullscreen();
+                } else if (playerRef.current.webkitRequestFullscreen) { /* Safari */
+                    playerRef.current.webkitRequestFullscreen();
+                } else if (playerRef.current.msRequestFullscreen) { /* IE11 */
+                    playerRef.current.msRequestFullscreen();
+                }
+                // if (screen.orientation) {
+                    await window.screen.orientation.lock('landscape');
+                // }
+            }
+            else {
+                // playerRef.current.exitFullscreen()
+                if (playerRef.current.exitFullscreen) {
+                    playerRef.current.exitFullscreen();
+                } else if (playerRef.current.webkitExitFullscreen) { /* Safari */
+                    playerRef.current.webkitExitFullscreen();
+                } else if (playerRef.current.msExitFullscreen) { /* IE11 */
+                    playerRef.current.msExitFullscreen();
+                }
+            }
+            setisfullScreen(!isfullScreen)
+        }
+        catch (err) {
+            console.log(err)
         }
     }
     return (
