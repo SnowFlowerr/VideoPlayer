@@ -7,6 +7,7 @@ export default function Player() {
     const [duration, setDuration] = useState(0)
     const [isplaying, setisplaying] = useState(true)
     const [isfullScreen, setisfullScreen] = useState(false)
+    const [ispip, setispip] = useState(false)
     const videoRef = useRef(null)
     const playerRef = useRef(null)
     function handleRange(e) {
@@ -19,7 +20,12 @@ export default function Player() {
         document.addEventListener('fullscreenchange', (event) => {
             setisfullScreen(!isfullScreen)
         })
-    },[isfullScreen])
+    }, [isfullScreen])
+    useEffect(() => {
+        document.addEventListener('enterpictureinpicture', (event) => {
+            setispip(!ispip)
+        })
+    }, [ispip])
 
     function getDuration(duration) {
         duration = Math.floor(duration - 0);
@@ -54,19 +60,7 @@ export default function Player() {
 
     async function handleFullScreen() {
         // setisfullScreen(!isfullScreen)
-        try {
-            if (!isfullScreen) {
-                if (window.screen.orientation) {
-                    window.screen.orientation.lock('landscape').then(()=>console.log("lock")).catch((err)=>console.log(err))
-                }
-                else{
-                    window.screen.orientation.unlock().then(()=>console.log("unlock")).catch((err)=>console.log(err))
-                }
-            }
-        }
-        catch (err) {
-            console.log(err)
-        }
+        
         try {
             if (!isfullScreen) {
                 // playerRef.current.requestFullscreen()
@@ -91,13 +85,26 @@ export default function Player() {
         catch (err) {
             console.log(err)
         }
-        
+        try {
+            if (!isfullScreen) {
+                if (window.screen.orientation) {
+                    window.screen.orientation.lock('landscape').then(() => console.log("lock")).catch((err) => console.log(err))
+                }
+                else {
+                    window.screen.orientation.unlock().then(() => console.log("unlock")).catch((err) => console.log(err))
+                }
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+
         // setisfullScreen(!isfullScreen)
     }
     return (
         <>
             <div className={isfullScreen ? styles.mainBox2 : styles.mainBox} ref={playerRef}>
-                <video src="https://res.cloudinary.com/dl5gqrtf0/video/upload/v1726324708/Videos/lrqcedcxkwqlnskuepax.mp4" height={"100%"} width={"100%"} ref={videoRef} onTimeUpdate={() => setRange(videoRef.current.currentTime)} onClick={handlePlay} onDurationChange={() => setDuration(videoRef.current?.duration)} onEnded={handlePlay} ></video>
+                <video src="https://res.cloudinary.com/dl5gqrtf0/video/upload/v1726324708/Videos/lrqcedcxkwqlnskuepax.mp4" height={"100%"} width={"100%"} ref={videoRef} onTimeUpdate={() => setRange(videoRef.current.currentTime)} onClick={handlePlay} onDurationChange={() => setDuration(videoRef.current?.duration)} onEnded={handlePlay}></video>
 
                 <div className={styles.controls}>
                     <div className={styles.range}>
@@ -134,10 +141,10 @@ export default function Player() {
                         </div>
                         <div className={styles.second}>
                             <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#e8eaed"><path d="m357.67-52-20-135.67q-10.34-3.33-23-10.66Q302-205.67 293-212.67l-126.33 57-124-218 113-83.33q-.67-5-1-11.5-.34-6.5-.34-11.5t.34-11.5q.33-6.5 1-11.5l-113-84 124-216L295-747q8.33-6.33 20.33-13.17 12-6.83 22.34-10.16l20-138.34h244.66l20 137.67q10.34 4 23 10.5Q658-754 667-747l127-56 123.33 216-114 82.67q.67 5.66 1.34 12.16.66 6.5.66 12.17t-.83 11.83q-.83 6.17-1.5 11.84l114 82.66-124.33 218-127-57q-9 7-20.67 14.34-11.67 7.33-22.67 10.66L602.33-52H357.67Zm120.66-294.67q55.34 0 94.34-39t39-94.33q0-55.33-39-94.33t-94.34-39q-55.33 0-94.33 39T345-480q0 55.33 39 94.33t94.33 39Z"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#e8eaed"><path d="m357.67-52-20-135.67q-10.34-3.33-23-10.66Q302-205.67 293-212.67l-126.33 57-124-218 113-83.33q-.67-5-1-11.5-.34-6.5-.34-11.5t.34-11.5q.33-6.5 1-11.5l-113-84 124-216L295-747q8.33-6.33 20.33-13.17 12-6.83 22.34-10.16l20-138.34h244.66l20 137.67q10.34 4 23 10.5Q658-754 667-747l127-56 123.33 216-114 82.67q.67 5.66 1.34 12.16.66 6.5.66 12.17t-.83 11.83q-.83 6.17-1.5 11.84l114 82.66-124.33 218-127-57q-9 7-20.67 14.34-11.67 7.33-22.67 10.66L602.33-52H357.67Zm120.66-294.67q55.34 0 94.34-39t39-94.33q0-55.33-39-94.33t-94.34-39q-55.33 0-94.33 39T345-480q0 55.33 39 94.33t94.33 39Z" /></svg>
                             </div>
-                            <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#e8eaed"><path d="M52-523.33v-105.34h125.67l-173.34-172 75-75L252-703v-125.67h104.67v305.34H52ZM156.67-132q-43.7 0-74.19-30.48Q52-192.97 52-236.67V-450h104.67v213.33h349V-132h-349Zm646.66-276.67v-314.66H430v-105.34h373.33q43.98 0 74.66 30.68t30.68 74.66v314.66H803.33ZM572.33-131v-211h336.34v211H572.33Z"/></svg>
+                            <div onClick={()=>videoRef.current.requestPictureInPicture()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" fill="#e8eaed"><path d="M52-523.33v-105.34h125.67l-173.34-172 75-75L252-703v-125.67h104.67v305.34H52ZM156.67-132q-43.7 0-74.19-30.48Q52-192.97 52-236.67V-450h104.67v213.33h349V-132h-349Zm646.66-276.67v-314.66H430v-105.34h373.33q43.98 0 74.66 30.68t30.68 74.66v314.66H803.33ZM572.33-131v-211h336.34v211H572.33Z" /></svg>
                             </div>
                             <div title='full screen' onClick={handleFullScreen}>
                                 {isfullScreen ?
